@@ -32,7 +32,11 @@ class GitFlowAvh < Formula
 
     resource('completion').stage do
       bash_completion.install "git-flow-completion.bash"
-      zsh_completion.install "git-flow-completion.zsh"
+      inreplace "git-flow-completion.zsh" do |s|
+        s.gsub! '!zsh', 'compdef git-flow'
+        s.gsub! /^zstyle .*$/, '_git-flow "$@"'
+      end
+      zsh_completion.install "git-flow-completion.zsh" => "_git-flow"
     end
   end
 
